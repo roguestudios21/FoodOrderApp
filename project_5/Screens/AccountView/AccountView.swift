@@ -17,13 +17,13 @@ struct AccountView: View {
         NavigationView {
             Form {
                 Section(header: Text("Personal Info")){
-                    TextField("First Name", text: $viewModel.firstName)
-                    TextField("Last Name", text: $viewModel.lastName)
-                    TextField("Email", text: $viewModel.email)
+                    TextField("First Name", text: $viewModel.user.firstName)
+                    TextField("Last Name", text: $viewModel.user.lastName)
+                    TextField("Email", text: $viewModel.user.email)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                    DatePicker("Birthday", selection: $viewModel.birthdate, displayedComponents: .date)
+                    DatePicker("Birthday", selection: $viewModel.user.birthdate, displayedComponents: .date)
                     
                     Button{
                         viewModel.saveChange()
@@ -33,13 +33,16 @@ struct AccountView: View {
                 }
                 
                 Section(header: Text("Request")){
-                    Toggle("Extra Napkins", isOn: $viewModel.extraNapkins)
+                    Toggle("Extra Napkins", isOn: $viewModel.user.extraNapkins)
                         .toggleStyle(SwitchToggleStyle(tint: Color("brandPrimary")))
-                    Toggle("Extra Condiments", isOn: $viewModel.extraCondiments)
+                    Toggle("Extra Condiments", isOn: $viewModel.user.extraCondiments)
                         .toggleStyle(SwitchToggleStyle(tint: Color("brandPrimary")))
                 }
             }
             .navigationBarTitle("Account")
+        }
+        .onAppear{
+            viewModel.retriveUser()
         }
         .alert(item: $viewModel.alertItem) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
